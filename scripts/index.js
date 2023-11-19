@@ -10,7 +10,7 @@
 
 const cardList = document.querySelector('.places__list')
 
-function addCard (card) {
+function createCard (card, callbackRemove) {
     const cardTemplate = document.querySelector('#card-template').content 
     const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true)
     const cardImage = cardElement.querySelector('.card__image')
@@ -20,16 +20,16 @@ function addCard (card) {
     cardImage.setAttribute('src', card.link)
     cardImage.setAttribute('alt', `Фотография: ${card.name}`)
 
-    removeButton.addEventListener('click', removeCard)
+    removeButton.addEventListener('click', callbackRemove)
     
-    cardList.append(cardElement)
-}
-
-for (card of initialCards) {
-    addCard(card)
+    return cardElement
 }
 
 function removeCard (event) {
     cardElement = event.target.closest('.card')
     cardElement.remove()
+}
+
+for (card of initialCards) {
+    cardList.append(createCard(card, removeCard)) // Передаю функцию callback в функцию создания карточки createCard 13:
 }
