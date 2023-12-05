@@ -1,4 +1,5 @@
 let inAnimation = false
+const FADE_ANIMATION_TIMEOUT = 600
 
 function modalClose(modalWindow) {
     inAnimation = true 
@@ -7,7 +8,7 @@ function modalClose(modalWindow) {
     setTimeout(() => {
         modalWindow.classList.remove('popup_is-animated')
         inAnimation = false 
-    }, 600)
+    }, FADE_ANIMATION_TIMEOUT)
 }
 
 function openingCycle(modal) {
@@ -19,7 +20,7 @@ function openingCycle(modal) {
     setTimeout(() => {
         modal.classList.remove('popup_is-animated')
         inAnimation = false
-    }, 600)
+    }, FADE_ANIMATION_TIMEOUT)
 
     modal.addEventListener('click', function toClose(event) {
         const target = event.target.classList
