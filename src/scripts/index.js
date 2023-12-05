@@ -65,18 +65,16 @@ newCardModalForm.addEventListener('input', (event) => {
 
 newCardModalButton.addEventListener('click', (evt) => {
     evt.preventDefault()
-
     let name = newCardNameInput.value
     let link = newCardLinkInput.value
-    
+
     modalClose(newCardModal)
-    
-    loadImage(name, link)
+
+    loadImage (name, link)
         .then((event) => {
-            console.log('aaaa',event)
             cardList.prepend(createCard(event, cardEvent))
         })
-        .catch(() => {
-            console.error('Изображение по ссылке не найдено')
+        .catch((error) => {
+            console.error(`Изображение по ссылке ${error} не найдено`)
         })
 })

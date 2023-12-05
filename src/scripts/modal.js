@@ -10,7 +10,7 @@ function modalClose(modalWindow) {
     }, 600)
 }
 
-function openingCycle(modal) { // Не уверен что промис тут уместен
+function openingCycle(modal) {
     
     inAnimation = true
 
@@ -20,7 +20,6 @@ function openingCycle(modal) { // Не уверен что промис тут �
         modal.classList.remove('popup_is-animated')
         inAnimation = false
     }, 600)
-
 
     modal.addEventListener('click', function toClose(event) {
         const target = event.target.classList
@@ -51,14 +50,16 @@ function modalProfileOpen(event, profileModal, newCardModal) {
 
 function modalImageOpen(event, imageModal, modalTypeImage) {
     if (event.target.classList.contains('card__image') && inAnimation === false) {
+        const descrModal = modalTypeImage.querySelector('.popup__caption')
         imageModal.setAttribute('src', event.target.src)
         imageModal.setAttribute('alt', event.target.alt)
+        descrModal.textContent = event.target.alt
         openingCycle(modalTypeImage)
     }
 }
 
 function submitButton(isFormValid, modalButton) {
-    if(isFormValid) {
+    if (isFormValid) {
         modalButton.removeAttribute('disabled')
         modalButton.classList.remove('popup__button_disabled')
         modalButton.classList.add('popup__button')

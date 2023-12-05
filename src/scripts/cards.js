@@ -31,7 +31,7 @@ function createCard (card, cardEvent) {
   const cardImage = cardElement.querySelector('.card__image')
 
   cardElement.querySelector('.card__title').textContent = card.name
-  cardImage.setAttribute('src', card.link)
+  cardImage.setAttribute('src', card.link || card.src)
   cardImage.setAttribute('alt', `Фотография: ${card.name}`)
 
   cardElement.addEventListener('click', cardEvent)
@@ -49,13 +49,13 @@ function cardEvent (event) {
 
 function loadImage (name, link) {
   return new Promise ((resolve, reject) => {
-    const image = {}
+    const image = document.createElement('img')
+
+    image.src = link
     image.name = name
-    image.link = link
-    image.onerror = reject
-    image.onload = resolve
-    console.log(image)
-    return image
+    
+    image.onload = () => resolve(image)
+    image.onerror = () => reject(link)
   })
 }
 
