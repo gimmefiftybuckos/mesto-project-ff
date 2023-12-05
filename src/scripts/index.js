@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import {createCard, loadImage, cardEvent, initialCards} from './cards.js'
-import {modalProfileOpen, modalImageOpen, modalClose, submitButton, clearInputValue, updateInputValue, changeProfile} from './modal.js'
+import {openModalProfile, openModalImage, closeModal, submitButton, clearInputValue, updateInputValue, changeProfile} from './modal.js'
 
 const cardList = document.querySelector('.places__list')
 const profile = document.querySelector('.profile')
@@ -28,13 +28,13 @@ initialCards.forEach((item) => {
 })
 
 profile.addEventListener('click', (event) => {
-    modalProfileOpen(event, profileModal, newCardModal)
+    openModalProfile(event, profileModal, newCardModal)
     clearInputValue(newCardNameInput, newCardLinkInput)
     updateInputValue(profileNameInput, profileDescrInput, profileName, profileDesc)
 })
 
 cardList.addEventListener('click', (event) => {
-    modalImageOpen(event, imageModal, modalTypeImage)
+    openModalImage(event, imageModal, modalTypeImage)
 })
 
 let isValid
@@ -68,11 +68,10 @@ newCardModalButton.addEventListener('click', (evt) => {
     let name = newCardNameInput.value
     let link = newCardLinkInput.value
 
-    modalClose(newCardModal)
-
     loadImage (name, link)
         .then((event) => {
             cardList.prepend(createCard(event, cardEvent))
+            closeModal(newCardModal)
         })
         .catch((error) => {
             console.error(`Изображение по ссылке ${error} не найдено`)
