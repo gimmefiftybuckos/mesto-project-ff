@@ -25,30 +25,38 @@ const initialCards = [
     }
 ];
 
-const cardList = document.querySelector('.places__list')
+function createCard (card, cardEvent) {
+  const cardTemplate = document.querySelector('#card-template').content 
+  const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true)
+  const cardImage = cardElement.querySelector('.card__image')
 
-function createCard (card, callbackRemove) {
-    const cardTemplate = document.querySelector('#card-template').content 
-    const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true)
-    const cardImage = cardElement.querySelector('.card__image')
-    const removeButton = cardElement.querySelector('.card__delete-button')
+  cardElement.querySelector('.card__title').textContent = card.name
+  cardImage.setAttribute('src', card.link)
+  cardImage.setAttribute('alt', `Фотография: ${card.name}`)
 
-    cardElement.querySelector('.card__title').textContent = card.name
-    cardImage.setAttribute('src', card.link)
-    cardImage.setAttribute('alt', `Фотография: ${card.name}`)
+  cardElement.addEventListener('click', cardEvent)
 
-    removeButton.addEventListener('click', callbackRemove)
-    
-    return cardElement
+  return cardElement
 }
 
-function removeCard (event) {
-    cardElement = event.target.closest('.card')
-    cardElement.remove()
+function cardEvent (event) {
+  if (event.target.classList.contains('card__delete-button')) {
+    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
+  } else if (event.target.classList.contains('card__like-button')) {
+    event.target.classList.toggle('card__like-button_is-active')
+  }
 }
 
-initialCards.forEach((item) => {
-  cardList.append(createCard(item, removeCard)) // Передаю функцию callback в функцию создания карточки createCard
-})
+function loadImage (name, link) {
+  return new Promise ((resolve, reject) => {
+    const image = {}
+    image.name = name
+    image.link = link
+    image.onerror = reject
+    image.onload = resolve
+    console.log(image)
+    return image
+  })
+}
 
-// export default initialCards
+export {createCard, loadImage, cardEvent, initialCards}
