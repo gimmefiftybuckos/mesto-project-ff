@@ -1,6 +1,8 @@
 import '../pages/index.css';
-import {createCard, loadImage, cardEvent, initialCards} from './cards.js'
+import {createTemplate, loadImage, handleDelete, handleLike, handleImageClick, initialCards} from './cards.js'
 import {openModalProfile, openModalImage, closeModal, submitButton, clearInputValue, updateInputValue, changeProfile} from './modal.js'
+
+const cardTemplate = document.querySelector('#card-template').content 
 
 const cardList = document.querySelector('.places__list')
 const profile = document.querySelector('.profile')
@@ -22,9 +24,10 @@ const newCardModalForm = document.forms['new-place']
 const newCardNameInput = newCardModalForm.elements['place-name']
 const newCardLinkInput = newCardModalForm.elements.link
 
+const createCard = createTemplate(cardTemplate, handleDelete, handleLike, handleImageClick)
 
 initialCards.forEach((item) => {
-    cardList.append(createCard(item, cardEvent))
+    cardList.append(createCard(item))
 })
 
 profile.addEventListener('click', (event) => {
@@ -33,14 +36,10 @@ profile.addEventListener('click', (event) => {
     updateInputValue(profileNameInput, profileDescrInput, profileName, profileDesc)
 })
 
-cardList.addEventListener('click', (event) => {
-    openModalImage(event, imageModal, modalTypeImage)
-})
-
 let isValid
 
 profileModalForm.addEventListener('input', (event) => {
-    if(profileNameInput.value.length > 2 && profileDescrInput.value.length > 2) {
+    if(profileNameInput.value.length >= 2 && profileDescrInput.value.length >= 2) {
         isValid = true
     } else {
         isValid = false
@@ -48,14 +47,15 @@ profileModalForm.addEventListener('input', (event) => {
     submitButton(isValid, profileModalButton)
 })
 
-profileModalButton.addEventListener('click', (event) => {
+profileModalForm.addEventListener('submit', (event) => {
     event.preventDefault()
     changeProfile(profileNameInput, profileDescrInput, profileName, profileDesc)
+    closeModal(profileModal)
 })
 
 submitButton(isValid = false, newCardModalButton)
 newCardModalForm.addEventListener('input', (event) => {
-    if(newCardNameInput.value.length > 2 && newCardLinkInput.value.length > 2) {
+    if(newCardNameInput.value.length >= 2 && newCardLinkInput.value.length >= 2) {
         isValid = true
     } else {
         isValid = false
@@ -63,14 +63,14 @@ newCardModalForm.addEventListener('input', (event) => {
     submitButton(isValid, newCardModalButton)
 })
 
-newCardModalButton.addEventListener('click', (evt) => {
+newCardModalForm.addEventListener('submit', (evt) => {
     evt.preventDefault()
-    let name = newCardNameInput.value
-    let link = newCardLinkInput.value
+    const name = newCardNameInput.value
+    const link = newCardLinkInput.value
 
     loadImage (name, link)
         .then((event) => {
-            cardList.prepend(createCard(event, cardEvent))
+            cardList.prepend(createCard(event, handleDelete))
             closeModal(newCardModal)
         })
         .catch((error) => {

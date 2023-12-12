@@ -11,7 +11,7 @@ function closeModal(modalWindow) {
     }, FADE_ANIMATION_TIMEOUT)
 }
 
-function openingCycle(modal) {
+function openModal(modal) {
     
     inAnimation = true
 
@@ -43,19 +43,19 @@ function openingCycle(modal) {
 function openModalProfile(event, profileModal, newCardModal) {
     const target = event.target.classList
     if (target.contains('profile__edit-button') && !inAnimation) {
-        openingCycle(profileModal)
+        openModal(profileModal)
     } else if (target.contains('profile__add-button') && !inAnimation) {
-        openingCycle(newCardModal)
+        openModal(newCardModal)
     }
 }
 
-function openModalImage(event, imageModal, modalTypeImage) {
+function openModalImage(event) {
     if (event.target.classList.contains('card__image') && !inAnimation) {
-        const descrModal = modalTypeImage.querySelector('.popup__caption')
+        // const descrModal = modalTypeImage.querySelector('.popup__caption')
         imageModal.setAttribute('src', event.target.src)
         imageModal.setAttribute('alt', event.target.alt)
         descrModal.textContent = event.target.alt
-        openingCycle(modalTypeImage)
+        openModal(event.target)
     }
 }
 

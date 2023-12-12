@@ -25,26 +25,46 @@ const initialCards = [
     }
 ];
 
-function createCard (card, cardEvent) {
-  const cardTemplate = document.querySelector('#card-template').content 
-  const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true)
-  const cardImage = cardElement.querySelector('.card__image')
+function createTemplate (cardTemplate, handleDelete, handleLike, handleImageClick) {
+    
+  return function (card) {
 
-  cardElement.querySelector('.card__title').textContent = card.name
-  cardImage.setAttribute('src', card.link || card.src)
-  cardImage.setAttribute('alt', `Фотография: ${card.name}`)
+    const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true)
+    const cardImage = cardElement.querySelector('.card__image')
+    const removeButton = cardElement.querySelector('.card__delete-button')
+    const likeButton = cardElement.querySelector('.card__like-button')
+    const cardTitle = cardElement.querySelector('.card__title')
 
-  cardElement.addEventListener('click', cardEvent)
+    cardTitle.textContent = card.name
+    cardImage.setAttribute('src', card.link || card.src)
+    cardImage.setAttribute('alt', `Фотография: ${card.name}`)  
 
-  return cardElement
+    removeButton.addEventListener('click', (event) => {
+      handleDelete(event)
+    })
+    likeButton.addEventListener('click', (event) => {
+      handleLike(event)
+    })
+    cardImage.addEventListener('click', (event) => {
+      handleImageClick(event)
+    })
+    
+    return cardElement 
+  }
+} // 7.12 const с DOM перенес в index, в случае return cardElement.cloneNode(true) handler не вешается
+
+function handleDelete (event) {
+  let cardElement = event.target.closest('.card')
+  cardElement.remove()
 }
 
-function cardEvent (event) {
-  if (event.target.classList.contains('card__delete-button')) {
-    event.target.parentNode.parentNode.removeChild(event.target.parentNode)
-  } else if (event.target.classList.contains('card__like-button')) {
-    event.target.classList.toggle('card__like-button_is-active')
-  }
+function handleLike (event) {
+  let cardElement = event.target.closest('.card__like-button')
+  cardElement.toggle('card__like-button_is-active')
+}
+
+function handleImageClick (event) {
+  openModalImage(event)
 }
 
 function loadImage (name, link) {
@@ -59,4 +79,4 @@ function loadImage (name, link) {
   })
 }
 
-export {createCard, loadImage, cardEvent, initialCards}
+export {createTemplate, loadImage, handleDelete, handleLike, handleImageClick, initialCards}
