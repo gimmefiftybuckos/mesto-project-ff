@@ -9,10 +9,11 @@ function closeModal(modalWindow) {
         modalWindow.classList.remove('popup_is-animated')
         inAnimation = false 
     }, FADE_ANIMATION_TIMEOUT)
+
+    document.removeEventListener('keydown', handleEscape)
 }
 
 function openModal(modal) {
-    
     inAnimation = true
 
     modal.classList.add('popup_is-animated')
@@ -22,40 +23,24 @@ function openModal(modal) {
         inAnimation = false
     }, FADE_ANIMATION_TIMEOUT)
 
-    modal.addEventListener('click', function toClose(event) {
-        const target = event.target.classList
-        if ((target.contains('popup__close') || target.contains('popup')) && inAnimation === false) {
-            closeModal(modal)
-            document.removeEventListener('keydown', toClose)
-            modal.removeEventListener('click', toClose)
-        }
-    })
-
-    document.addEventListener('keydown', function toClose(event) {
-        if (event.code === 'Escape' && !inAnimation) {
-            closeModal(modal)
-            document.removeEventListener('keydown', toClose)
-            modal.removeEventListener('click', toClose)
-        }
-    })
+    document.addEventListener('keydown', handleEscape)
 }
 
-function openModalProfile(event, profileModal, newCardModal) {
-    const target = event.target.classList
-    if (target.contains('profile__edit-button') && !inAnimation) {
-        openModal(profileModal)
-    } else if (target.contains('profile__add-button') && !inAnimation) {
-        openModal(newCardModal)
+function handleEscape(evt) {
+    if (evt.key === 'Escape') {
+      const openedPopup = document.querySelector('.popup_is-opened') 
+      closeModal(openedPopup)
     }
 }
 
-function openModalImage(event) {
-    if (event.target.classList.contains('card__image') && !inAnimation) {
-        // const descrModal = modalTypeImage.querySelector('.popup__caption')
-        imageModal.setAttribute('src', event.target.src)
-        imageModal.setAttribute('alt', event.target.alt)
-        descrModal.textContent = event.target.alt
-        openModal(event.target)
+function createImageHandler(modalTypeImage, imageModal, descrModal) {
+    return function (event) {
+        if (event.target.classList.contains('card__image') && !inAnimation) {
+            imageModal.setAttribute('src', event.target.src)
+            imageModal.setAttribute('alt', event.target.alt)
+            descrModal.textContent = event.target.alt
+            openModal(modalTypeImage)
+        }
     }
 }
 
@@ -71,12 +56,7 @@ function submitButton(isFormValid, modalButton) {
     }
 }
 
-function clearInputValue (nameInput, linkInput) {
-    nameInput.value = ''
-    linkInput.value = ''
-}
-
-function updateInputValue (nameInput, descriptionInput, name, description) {
+function fillProfileInputs (nameInput, descriptionInput, name, description) {
     nameInput.value = name.textContent
     descriptionInput.value = description.textContent
 }
@@ -86,4 +66,4 @@ function changeProfile (nameInput, descriptionInput, name, description) {
     description.textContent = descriptionInput.value  
 }
 
-export {openModalProfile, openModalImage, closeModal, submitButton, clearInputValue, updateInputValue, changeProfile}
+export {openModal, createImageHandler, closeModal, submitButton, fillProfileInputs, changeProfile}

@@ -28,7 +28,6 @@ const initialCards = [
 function createTemplate (cardTemplate, handleDelete, handleLike, handleImageClick) {
     
   return function (card) {
-
     const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true)
     const cardImage = cardElement.querySelector('.card__image')
     const removeButton = cardElement.querySelector('.card__delete-button')
@@ -59,12 +58,7 @@ function handleDelete (event) {
 }
 
 function handleLike (event) {
-  let cardElement = event.target.closest('.card__like-button')
-  cardElement.toggle('card__like-button_is-active')
-}
-
-function handleImageClick (event) {
-  openModalImage(event)
+  event.target.classList.toggle('card__like-button_is-active')
 }
 
 function loadImage (name, link) {
@@ -79,4 +73,4 @@ function loadImage (name, link) {
   })
 }
 
-export {createTemplate, loadImage, handleDelete, handleLike, handleImageClick, initialCards}
+export {createTemplate, loadImage, handleDelete, handleLike, initialCards}
