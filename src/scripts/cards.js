@@ -41,7 +41,7 @@ function createTemplate (cardTemplate, handleDelete, handleLike, handleImageClic
     removeButton.addEventListener('click', handleDelete)
     likeButton.addEventListener('click', handleLike)
     cardImage.addEventListener('click', () => {
-      handleImageClick(cardTitle, cardImage)
+      handleImageClick(card.name, cardImage.src)
     })
     
     return cardElement 

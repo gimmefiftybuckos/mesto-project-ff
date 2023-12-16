@@ -31,8 +31,8 @@ const newCardLinkInput = newCardModalForm.elements.link
 const handleImageClick = createImageHandler(modalTypeImage, imageModal, descrModal)
 const createCard = createTemplate(cardTemplate, handleDelete, handleLike, handleImageClick)
 
-initialCards.forEach((item) => {
-    cardList.append(createCard(item))
+initialCards.forEach((card) => {
+    cardList.append(createCard(card))
 })
 
 profileEditBtn.addEventListener('click', () => {

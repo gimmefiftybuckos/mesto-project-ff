@@ -34,10 +34,9 @@ function handleEscape(evt) {
 }
 
 function createImageHandler(modalTypeImage, imageModal, descrModal) {
-    return function (cardTitle, cardImage) {
-        descrModal.textContent = cardTitle.alt
-        imageModal.setAttribute('src', cardImage.src)
-        imageModal.setAttribute('alt', cardImage.alt)
+    return function (name, imageLink) {
+        descrModal.textContent = name
+        imageModal.setAttribute('src', imageLink)
         openModal(modalTypeImage)
     }
 }
