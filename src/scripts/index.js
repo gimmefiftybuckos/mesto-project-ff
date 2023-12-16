@@ -1,6 +1,6 @@
 import '../pages/index.css';
 import {createTemplate, loadImage, handleDelete, handleLike, initialCards} from './cards.js'
-import {openModal, createImageHandler, closeModal, submitButton, fillProfileInputs, changeProfile} from './modal.js'
+import {openModal, createImageHandler, closeModal, validateSubmitButton, fillProfileInputs, changeProfile} from './modal.js'
 
 const cardTemplate = document.querySelector('#card-template').content 
 
@@ -63,7 +63,7 @@ profileModalForm.addEventListener('input', (event) => {
     } else {
         isValid = false
     }
-    submitButton(isValid, profileModalButton)
+    validateSubmitButton(isValid, profileModalButton)
 })
 
 profileModalForm.addEventListener('submit', (event) => {
@@ -72,14 +72,14 @@ profileModalForm.addEventListener('submit', (event) => {
     closeModal(profileModal)
 })
 
-submitButton(isValid = false, newCardModalButton)
+validateSubmitButton(isValid = false, newCardModalButton)
 newCardModalForm.addEventListener('input', (event) => {
     if(newCardNameInput.value.length >= 2 && newCardLinkInput.value.length >= 2) {
         isValid = true
     } else {
         isValid = false
     }
-    submitButton(isValid, newCardModalButton)
+    validateSubmitButton(isValid, newCardModalButton)
 })
 
 newCardModalForm.addEventListener('submit', (evt) => {
@@ -88,8 +88,8 @@ newCardModalForm.addEventListener('submit', (evt) => {
     const link = newCardLinkInput.value
     
     loadImage (name, link)
-        .then((event) => {
-            cardList.prepend(createCard(event, handleDelete))
+        .then((card) => {
+            cardList.prepend(createCard(card))
             closeModal(newCardModal)
         })
         .catch((error) => {

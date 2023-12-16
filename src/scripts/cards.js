@@ -38,14 +38,10 @@ function createTemplate (cardTemplate, handleDelete, handleLike, handleImageClic
     cardImage.setAttribute('src', card.link || card.src)
     cardImage.setAttribute('alt', `Фотография: ${card.name}`)  
 
-    removeButton.addEventListener('click', (event) => {
-      handleDelete(event)
-    })
-    likeButton.addEventListener('click', (event) => {
-      handleLike(event)
-    })
-    cardImage.addEventListener('click', (event) => {
-      handleImageClick(event)
+    removeButton.addEventListener('click', handleDelete)
+    likeButton.addEventListener('click', handleLike)
+    cardImage.addEventListener('click', () => {
+      handleImageClick(cardTitle, cardImage)
     })
     
     return cardElement 
@@ -53,7 +49,7 @@ function createTemplate (cardTemplate, handleDelete, handleLike, handleImageClic
 } // 7.12 const с DOM перенес в index, в случае return cardElement.cloneNode(true) handler не вешается
 
 function handleDelete (event) {
-  let cardElement = event.target.closest('.card')
+  const cardElement = event.target.closest('.card')
   cardElement.remove()
 }
 

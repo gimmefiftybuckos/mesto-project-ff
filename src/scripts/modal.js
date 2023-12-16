@@ -34,17 +34,15 @@ function handleEscape(evt) {
 }
 
 function createImageHandler(modalTypeImage, imageModal, descrModal) {
-    return function (event) {
-        if (event.target.classList.contains('card__image') && !inAnimation) {
-            imageModal.setAttribute('src', event.target.src)
-            imageModal.setAttribute('alt', event.target.alt)
-            descrModal.textContent = event.target.alt
-            openModal(modalTypeImage)
-        }
+    return function (cardTitle, cardImage) {
+        descrModal.textContent = cardTitle.alt
+        imageModal.setAttribute('src', cardImage.src)
+        imageModal.setAttribute('alt', cardImage.alt)
+        openModal(modalTypeImage)
     }
 }
 
-function submitButton(isFormValid, modalButton) {
+function validateSubmitButton(isFormValid, modalButton) {
     if (isFormValid) {
         modalButton.removeAttribute('disabled')
         modalButton.classList.remove('popup__button_disabled')
@@ -66,4 +64,4 @@ function changeProfile (nameInput, descriptionInput, name, description) {
     description.textContent = descriptionInput.value  
 }
 
-export {openModal, createImageHandler, closeModal, submitButton, fillProfileInputs, changeProfile}
+export {openModal, createImageHandler, closeModal, validateSubmitButton, fillProfileInputs, changeProfile}
