@@ -3,20 +3,20 @@
   height: 50px;
   font-size: 18px;
   line-height: 22px;
-  color: white;
+  color: #c5c5c5;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #c0c0c0;
+  background: inherit;
   border-radius: 2px;
-  border: none;
+  border: 1px solid #c5c5c5;
   transition: visibility 0s, background 0.3s;
   margin-top: 48px;
 }
 
-.popup__button:hover {
-  /* background: rgba(0, 0, 0, 0.8); */
-  cursor: pointer;
+.popup__button_disabled:hover {
+  background: inherit;
+  cursor: default;
 }
 
 @media screen and (max-width: 568px) {

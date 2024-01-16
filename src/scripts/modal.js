@@ -41,18 +41,6 @@ function createImageHandler(modalTypeImage, imageModal, descrModal) {
     }
 }
 
-function validateSubmitButton(isFormValid, modalButton) {
-    if (isFormValid) {
-        modalButton.removeAttribute('disabled')
-        modalButton.classList.remove('popup__button_disabled')
-        modalButton.classList.add('popup__button')
-    } else {
-        modalButton.setAttribute('disabled', true)
-        modalButton.classList.add('popup__button_disabled')
-        modalButton.classList.remove('popup__button')
-    }
-}
-
 function fillProfileInputs (nameInput, descriptionInput, name, description) {
     nameInput.value = name.textContent
     descriptionInput.value = description.textContent
@@ -63,4 +51,8 @@ function changeProfile (nameInput, descriptionInput, name, description) {
     description.textContent = descriptionInput.value  
 }
 
-export {openModal, createImageHandler, closeModal, validateSubmitButton, fillProfileInputs, changeProfile}
+function changeAvatar (profileAvatar, link) {
+    profileAvatar.style.backgroundImage = `url(${link})`
+}
+
+export {openModal, createImageHandler, closeModal, fillProfileInputs, changeProfile, changeAvatar}
