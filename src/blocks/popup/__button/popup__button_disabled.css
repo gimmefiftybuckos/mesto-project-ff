@@ -11,7 +11,7 @@
   border-radius: 2px;
   border: 1px solid #c5c5c5;
   transition: visibility 0s, background 0.3s;
-  margin-top: 48px;
+  margin-top: 31px;
 }
 
 .popup__button_disabled:hover {

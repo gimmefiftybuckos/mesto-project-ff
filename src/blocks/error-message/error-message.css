@@ -1,0 +1,21 @@
+@import url('./__text/error-message__text.css');
+@import url('./__title/error-message__title.css');
+
+.error-message {
+    font-family: 'Inter', Arial, sans-serif;
+    box-sizing: border-box;
+    position: fixed;
+    inset-inline-end: 30px;
+    inset-block-end: 30px;
+    display: none;
+    flex-direction: column;
+    gap: 30px;
+    padding: 34px 36px;
+    max-inline-size: 400px;
+    min-block-size: 150px;
+    inline-size: 100%;
+    background-color: rgba(255, 255, 255, .9);
+    border-radius: 10px;
+    color: rgb(255, 0, 0); 
+    /* opacity: .8; */
+}

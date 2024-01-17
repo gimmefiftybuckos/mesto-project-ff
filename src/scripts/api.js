@@ -124,7 +124,7 @@ async function decreaseCounter(cardId) {
                 authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
             }
         })
-        await console.log(await res.json())
+        // await console.log(await res.json())
         // return await res.json()
     } catch (err) {
         console.error(err)
@@ -148,8 +148,22 @@ async function updateAvatarData(avatarUrl) {
     } 
 }
 
-// export {deleteCardData, increaseCounter}
-export {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData}
+async function checkLink (avatarUrl) {
+    try {
+        const res = await fetch(`${avatarUrl}`, {
+            method: 'GET',
+        })
+        if (res.ok) {
+            return true
+        }
+    } catch (err) {
+        Promise.reject(res.status)
+        console.error(err)
+        return false
+    } 
+}
+
+export {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink}
 
 
 

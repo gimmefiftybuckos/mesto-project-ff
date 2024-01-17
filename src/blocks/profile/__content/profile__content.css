@@ -1,0 +1,27 @@
+.profile__content {
+    max-inline-size: 335px;
+} 
+
+@media screen and (max-width: 740px) {
+    .profile__content {
+        max-inline-size: 280px;
+    }
+}
+
+@media screen and (max-width: 570px) {
+    .profile__content {
+        max-inline-size: 220px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .profile__content {
+        max-inline-size: 280px;
+    }
+}
+
+@media screen and (max-width: 340px) {
+    .profile__content {
+        max-inline-size: 80vw;
+    }
+}

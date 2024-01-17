@@ -1,8 +1,9 @@
 import '../pages/index.css';
 import {createTemplate, loadImage, createDeleteHandle, createLikeHandle} from './cards.js'
-import {openModal, createImageHandler, closeModal, fillProfileInputs, changeProfile, changeAvatar} from './modal.js'
+import {openModal, createImageHandler, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText} from './modal.js'
 import {enableValidation, clearValidation} from './validation.js'
-import {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData} from './api.js'
+import {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink} from './api.js'
+import {showGlobalErrorMessage} from './error.js'
 
 const initialCards = await getInitalCards()
 const userProfileData = await loadProfileData()
@@ -38,7 +39,19 @@ const newCardLinkInput = newCardModalForm.elements['card-link']
 const avatarModalButton = avatarModal.querySelector('.button')
 const avatarModalForm = document.forms['edit-avatar']
 const avatarLinkInput = avatarModalForm.elements['avatar-link']
-console.log(profileAvatar)
+
+const errorWindow = document.querySelector('.error-message')
+const errorMessage = errorWindow.querySelector('.error-message__text')
+
+const validationConfig = {
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__button',
+    inactiveButtonClass: 'popup__button_disabled',
+    inputErrorSelector: '.popup__input-error',
+    inputErrorClass: 'popup__input_type_error',
+    inputUrlClass: 'popup__input_type_url',
+    errorClass: 'form__input-error_active'
+}
 
 const handleImageClick = createImageHandler(modalTypeImage, imageModal, descrModal)
 const handleDelete = createDeleteHandle(deleteCardData)
@@ -59,28 +72,26 @@ initialCards.forEach((card) => {
 
 profileEditBtn.addEventListener('click', () => {
     openModal(profileModal)
+    clearValidation(profileModalForm, validationConfig)
+    enableValidation(profileModalForm, validationConfig)
     fillProfileInputs(profileNameInput, profileDescrInput, profileName, profileDesc)
-    clearValidation(profileModalForm)
-    enableValidation(profileModalForm)
 })
 
 addNewCardBtn.addEventListener('click', () => {
     openModal(newCardModal)
-    enableValidation(newCardModalForm)
+    clearValidation(newCardModalForm, validationConfig)
+    enableValidation(newCardModalForm, validationConfig)
 })
 
 profileAvatar.addEventListener('click', () => {
     openModal(avatarModal)
-    clearValidation(avatarModalForm)
-    enableValidation(avatarModalForm)
+    clearValidation(avatarModalForm, validationConfig)
+    enableValidation(avatarModalForm, validationConfig)
 })
 
 popups.forEach((popup) => {
     popup.addEventListener('mousedown', (event) => {
-        if (event.target.classList.contains('popup_is-opened')) {
-            closeModal(popup)
-        }
-        if (event.target.classList.contains('popup__close')) {
+        if (event.target.classList.contains('popup_is-opened') || event.target.classList.contains('popup__close')) {
             closeModal(popup)
         }
     })
@@ -93,24 +104,47 @@ profileModalForm.addEventListener('submit', (event) => {
     closeModal(profileModal)
 })
 
+async function updateAvatar (link, event) {
+    try {
+        showSavingText(avatarModalButton)
+        const checkingResponse = await checkLink(link)
+        if (await checkingResponse) {
+            updateAvatarData(link)
+            changeAvatar(profileAvatar, link)
+            closeModal(avatarModal)
+        }
+    } catch (error) {
+        closeModal(avatarModal)
+        setTimeout(() => showGlobalErrorMessage(errorWindow, errorMessage, link), 600)
+        console.error(`Изображение по ссылке ${link} не найдено.`)
+    } finally {
+        hideSavingText(avatarModalButton)
+        event.target.reset()
+    }
+}
+
 avatarModalForm.addEventListener('submit', (event) => {
     event.preventDefault()
     const link = avatarLinkInput.value
-    updateAvatarData(link)
-    changeAvatar(profileAvatar, link)
-    closeModal(avatarModal)
-    event.target.reset()
+    updateAvatar (link, event)
 })
 
 async function addCard (name, link, event) {
     try {
-        const newCard = await uploadNewCard(name, link)
-        const loadedImage = await loadImage (name, link, newCard['_id'])
-        await cardList.prepend(createCard(loadedImage))
-        await closeModal(newCardModal)
-    } catch (err) {
-        console.error(`Изображение по ссылке не найдено. Ошибка ${error}`)
+        showSavingText(newCardModalButton)
+        const checkingResponse = await checkLink(link)
+        if (await checkingResponse) {
+            const newCard = await uploadNewCard(name, link)
+            const loadedImage = await loadImage (name, link, newCard['_id'])
+            await cardList.prepend(createCard(loadedImage))
+            await closeModal(newCardModal)
+        }
+    } catch (error) {
+        closeModal(newCardModal)
+        setTimeout(() => showGlobalErrorMessage(errorWindow, errorMessage, link), 600)
+        console.error(`Изображение по ссылке ${link} не найдено.`)
     } finally {
+        hideSavingText(newCardModalButton)
         event.target.reset()
     }
 }

@@ -15,7 +15,6 @@ function closeModal(modalWindow) {
 
 function openModal(modal) {
     inAnimation = true
-
     modal.classList.add('popup_is-animated')
     setTimeout(() => modal.classList.add('popup_is-opened'), 0)
     setTimeout(() => {
@@ -55,4 +54,14 @@ function changeAvatar (profileAvatar, link) {
     profileAvatar.style.backgroundImage = `url(${link})`
 }
 
-export {openModal, createImageHandler, closeModal, fillProfileInputs, changeProfile, changeAvatar}
+function showSavingText (button) {
+    button.textContent = 'Сохранение...'
+}
+
+function hideSavingText (button) {
+    button.textContent = 'Сохранить'
+}
+
+
+
+export {openModal, createImageHandler, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText}
