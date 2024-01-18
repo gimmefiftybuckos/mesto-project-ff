@@ -49,6 +49,7 @@ const validationConfig = {
     inactiveButtonClass: 'popup__button_disabled',
     inputErrorSelector: '.popup__input-error',
     inputErrorClass: 'popup__input_type_error',
+    inputConfirmClass: 'popup__input_type_confirm',
     inputUrlClass: 'popup__input_type_url',
     errorClass: 'form__input-error_active'
 }

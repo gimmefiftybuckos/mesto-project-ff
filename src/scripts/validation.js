@@ -31,6 +31,7 @@ const checkInputValidity = (formElement, inputElement, validationConfig) => {
       showInputError(formElement, inputElement, inputElement.validationMessage || inputElement.dataset.errorMessage, validationConfig);
     } else {
       hideInputError(formElement, inputElement, validationConfig)
+      inputElement.classList.add(validationConfig.inputConfirmClass)
     }
 };
 
@@ -73,6 +74,7 @@ function clearValidation (formElement, validationConfig) {
     const formList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector))
     formList.forEach((input) => {
         hideInputError(formElement, input, validationConfig)
+        input.classList.remove(validationConfig.inputConfirmClass)
         input.value = ''
     })
     errorElements.forEach((element) => {

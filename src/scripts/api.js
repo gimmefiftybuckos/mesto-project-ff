@@ -1,12 +1,22 @@
+const config = {
+  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-4',
+  headers: {
+    authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
+    'Content-Type': 'application/json'
+  }
+}
+
 async function getInitalCards() {
     try {
-        const res = await fetch('https://nomoreparties.co/v1/wff-cohort-4/cards', {
+        const res = await fetch(`${config.baseUrl}/cards`, {
         method: 'GET',
         headers: {
-            authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27'
+            authorization: config.headers.authorization
         },
         })
-        return await res.json()
+        if (res.ok) {
+            return await res.json()
+        }
     } catch (err) {
         console.error(err)
     }
@@ -14,11 +24,11 @@ async function getInitalCards() {
 
 async function updateProfileData(name, description) {
     try {
-        await fetch('https://nomoreparties.co/v1/wff-cohort-4/users/me', {
+        await fetch(`${config.baseUrl}/users/me`, {
             method: 'PATCH',
             headers: {
-                authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
-                'Content-Type': 'application/json'
+                authorization: config.headers.authorization,
+                'Content-Type': config.headers['Content-Type']
             },
             body: JSON.stringify({
                 name: name.value,
@@ -32,15 +42,15 @@ async function updateProfileData(name, description) {
 
 async function loadProfileData() {
     try {
-        const res = await fetch('https://nomoreparties.co/v1/wff-cohort-4/users/me', {
+        const res = await fetch(`${config.baseUrl}/users/me`, {
             method: 'GET',
             headers: {
-                authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
-                // 'Content-Type': 'application/json'
+                authorization: config.headers.authorization,
             },
         })
-        // await console.log(await res.json())
-        return await res.json()
+        if (res.ok) {
+            return await res.json()
+        }
     } catch (err) {
         console.error(err)
     } 
@@ -48,48 +58,31 @@ async function loadProfileData() {
 
 async function uploadNewCard(name, link) {
     try {
-        const res = await fetch('https://nomoreparties.co/v1/wff-cohort-4/cards', {
+        const res = await fetch(`${config.baseUrl}/cards`, {
             method: 'POST',
             headers: {
-                authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
-                'Content-Type': 'application/json'
+                authorization: config.headers.authorization,
+                'Content-Type': config.headers['Content-Type']
             },
             body: JSON.stringify({
                 name: name,
                 link: link
             })
         })
-        // await console.log(await res.json())
-        return await res.json()
+        if (res.ok) {
+            return await res.json()
+        }
     } catch (err) {
         console.error(err)
     } 
 }
 
-// function uploadNewCard(name, link) {
-//     fetch('https://nomoreparties.co/v1/wff-cohort-4/cards', {
-//         method: 'POST',
-//         headers: {
-//             authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify({
-//             name: name,
-//             link: link
-//         })
-//     })
-//     .then(res => res.json())
-//     .then((res) => {
-//         return res['_id']
-//     })
-// }
-
 async function deleteCardData(cardId) {
     try {
-        await fetch(`https://nomoreparties.co/v1/wff-cohort-4/cards/${cardId.id}`, {
+        await fetch(`${config.baseUrl}/cards/${cardId.id}`, {
             method: 'DELETE',
             headers: {
-                authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
+                authorization: config.headers.authorization,
                 
             }
         })
@@ -100,17 +93,16 @@ async function deleteCardData(cardId) {
 
 async function increaseCounter(cardId, user) {
     try {
-        const res = await fetch(`https://nomoreparties.co/v1/wff-cohort-4/cards/likes/${cardId.id}`, {
+        await fetch(`${config.baseUrl}/cards/likes/${cardId.id}`, {
             method: 'PUT',
             headers: {
-                authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
-                'Content-Type': 'application/json'
+                authorization: config.headers.authorization,
+                'Content-Type': config.headers['Content-Type']
             },
             body: JSON.stringify({
                 user: user
             })
         })
-        return await res.json()
     } catch (err) {
         console.error(err)
     } 
@@ -118,14 +110,12 @@ async function increaseCounter(cardId, user) {
 
 async function decreaseCounter(cardId) {
     try {
-        const res = await fetch(`https://nomoreparties.co/v1/wff-cohort-4/cards/likes/${cardId.id}`, {
+        await fetch(`${config.baseUrl}/cards/likes/${cardId.id}`, {
             method: 'DELETE',
             headers: {
-                authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
+                authorization: config.headers.authorization,
             }
         })
-        // await console.log(await res.json())
-        // return await res.json()
     } catch (err) {
         console.error(err)
     } 
@@ -133,11 +123,11 @@ async function decreaseCounter(cardId) {
 
 async function updateAvatarData(avatarUrl) {
     try {
-        await fetch('https://nomoreparties.co/v1/wff-cohort-4/users/me/avatar', {
+        await fetch(`${config.baseUrl}/users/me/avatar`, {
             method: 'PATCH',
             headers: {
-                authorization: '69d961c7-c84a-4106-920e-afcfe18d0f27',
-                'Content-Type': 'application/json'
+                authorization: config.headers.authorization,
+                'Content-Type': config.headers['Content-Type']
             },
             body: JSON.stringify({
                 avatar: avatarUrl
