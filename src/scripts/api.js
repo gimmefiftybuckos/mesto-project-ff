@@ -1,3 +1,5 @@
+import { data } from "autoprefixer"
+
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-4',
   headers: {
@@ -138,13 +140,13 @@ async function updateAvatarData(avatarUrl) {
     } 
 }
 
-async function checkLink (avatarUrl) {
+async function checkLink (url) {
     try {
-        const res = await fetch(`${avatarUrl}`, {
+        const res = await fetch(`${url}`, {
             method: 'GET',
         })
-        if (res.ok) {
-            return true
+        if (await res.status === 200) {
+            return true // по какой-то причине проходят не все сайты 
         }
     } catch (err) {
         Promise.reject(res.status)
