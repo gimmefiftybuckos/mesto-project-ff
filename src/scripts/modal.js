@@ -32,14 +32,6 @@ function handleEscape(evt) {
     }
 }
 
-function createImageHandler(modalTypeImage, imageModal, descrModal) {
-    return function (name, imageLink) {
-        descrModal.textContent = name
-        imageModal.setAttribute('src', imageLink)
-        openModal(modalTypeImage)
-    }
-}
-
 function fillProfileInputs (nameInput, descriptionInput, name, description) {
     nameInput.value = name.textContent
     descriptionInput.value = description.textContent
@@ -62,6 +54,4 @@ function hideSavingText (button) {
     button.textContent = 'Сохранить'
 }
 
-
-
-export {openModal, createImageHandler, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText}
+export {openModal, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText}

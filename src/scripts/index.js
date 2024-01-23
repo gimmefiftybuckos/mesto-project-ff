@@ -1,12 +1,17 @@
 import '../pages/index.css';
 import {createTemplate, loadImage, createDeleteHandle, createLikeHandle} from './cards.js'
-import {openModal, createImageHandler, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText} from './modal.js'
+import {openModal, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText} from './modal.js'
 import {enableValidation, clearValidation} from './validation.js'
 import {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink} from './api.js'
 import {showGlobalErrorMessage} from './error.js'
 
-const initialCards = await getInitalCards()
+const initialCards = await getInitalCards() 
+.catch((err) => console.log(err))
 const userProfileData = await loadProfileData()
+.catch((err) => console.log(err))
+
+Promise.all([initialCards, userProfileData])
+.catch((err) => console.log(err))
 
 const cardTemplate = document.querySelector('#card-template').content 
 
@@ -56,7 +61,7 @@ const validationConfig = {
 
 const handleImageClick = createImageHandler(modalTypeImage, imageModal, descrModal)
 const handleDelete = createDeleteHandle(deleteCardData)
-const handleLike = createLikeHandle(increaseCounter, decreaseCounter, userProfileData)
+const handleLike = createLikeHandle(increaseCounter, decreaseCounter)
 const createCard = createTemplate(cardTemplate, handleDelete, handleLike, handleImageClick, userProfileData)
 
 function loadProfile () {
@@ -105,10 +110,19 @@ profileModalForm.addEventListener('submit', (event) => {
     closeModal(profileModal)
 })
 
+function createImageHandler(modalTypeImage, imageModal, descrModal) {
+    return function (name, imageLink) {
+        descrModal.textContent = name
+        imageModal.setAttribute('src', imageLink)
+        openModal(modalTypeImage)
+    }
+}
+
 async function updateAvatar (link, event) {
     try {
         showSavingText(avatarModalButton)
         const checkingResponse = await checkLink(link)
+        .catch((err) => console.log(err))
         if (await checkingResponse) {
             updateAvatarData(link)
             changeAvatar(profileAvatar, link)
@@ -134,9 +148,12 @@ async function addCard (name, link, event) {
     try {
         showSavingText(newCardModalButton)
         const checkingResponse = await checkLink(link)
+        .catch((err) => console.log(err))
         if (await checkingResponse) {
             const newCard = await uploadNewCard(name, link)
+            .catch((err) => console.log(err))
             const loadedImage = await loadImage (name, link, newCard['_id'])
+            .catch((err) => console.log(err))
             await cardList.prepend(createCard(loadedImage))
             await closeModal(newCardModal)
         }

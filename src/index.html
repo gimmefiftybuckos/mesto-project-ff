@@ -6,7 +6,6 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Mesto</title>
-  <!-- <link rel="stylesheet" href="./pages/index.css"> -->
 </head>
 <body class="page">
 <div class="page__content">
@@ -44,9 +43,9 @@
       <button aria-label="Закрыть всплывающее окно редактирования профиля" type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile" novalidate>
-        <input type="text" minlength="2" maxlength="40" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="name" id="name-input" class="popup__input popup__input_type_name" placeholder="Имя" autocomplete="off" required>
+        <input type="text" minlength="2" maxlength="40" pattern="^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="name" id="name-input" class="popup__input popup__input_type_name" placeholder="Имя" autocomplete="off" required>
         <span class="popup__input-error name-input-error" ></span>
-        <input type="text" minlength="2" maxlength="200" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="description" id="description-input" class="popup__input popup__input_type_description" placeholder="Занятие" autocomplete="off" required>
+        <input type="text" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="description" id="description-input" class="popup__input popup__input_type_description" placeholder="Занятие" autocomplete="off" required>
         <span class="popup__input-error description-input-error"></span>
         <button aria-label="Сохранить изменения в профиле и закрыть всплывающее окно" type="submit" class="button popup__button">Сохранить</button>
       </form>
@@ -57,7 +56,7 @@
       <button aria-label="Закрыть всплывающее окно создания карточки" type="button" class="popup__close"></button>
       <h3 class="popup__title">Новое место</h3>
       <form class="popup__form" name="new-place" novalidate>
-        <input type="text" minlength="2" maxlength="30" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="place-name" id="card-name-input" class="popup__input popup__input_type_card-name" placeholder="Название" autocomplete="off" required>
+        <input type="text" minlength="2" maxlength="30" pattern="\^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$\gim" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="place-name" id="card-name-input" class="popup__input popup__input_type_card-name" placeholder="Название" autocomplete="off" required>
         <span class="popup__input-error card-name-input-error"></span>
         <input type="url" name="card-link" id="link-input" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
         <span class="popup__input-error link-input-error"></span>
@@ -78,7 +77,7 @@
       <h3 class="popup__title">Обновить аватар</h3>
       <form class="popup__form" name="edit-avatar" novalidate>
         <input type="url" name="avatar-link" id="avatar-link-input" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
-        <span class="popup__input-error avatar-link-input-error">aaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaa</span>
+        <span class="popup__input-error avatar-link-input-error"></span>
         <button aria-label="Сохранить карточку и закрыть всплывающее окно" type="submit" class="button popup__button">Сохранить</button>
       </form>
     </div>

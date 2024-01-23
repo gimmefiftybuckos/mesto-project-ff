@@ -1,5 +1,3 @@
-import { data } from "autoprefixer"
-
 const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-4',
   headers: {
@@ -8,151 +6,114 @@ const config = {
   }
 }
 
-async function getInitalCards() {
-    try {
-        const res = await fetch(`${config.baseUrl}/cards`, {
-        method: 'GET',
-        headers: {
-            authorization: config.headers.authorization
-        },
-        })
-        if (res.ok) {
-            return await res.json()
-        }
-    } catch (err) {
-        console.error(err)
-    }
+async function handleResponse(res) {
+    if (res.ok) {
+        return await res.json()
+    } 
+    return await Promise.reject(`Ошибка: ${res.status}`)
+}
+
+async function getInitalCards() { 
+    const res = await fetch(`${config.baseUrl}/cards`, { 
+    method: 'GET', 
+    headers: { 
+        authorization: config.headers.authorization 
+    }, 
+    }) 
+    return await handleResponse(res)
 }
 
 async function updateProfileData(name, description) {
-    try {
-        await fetch(`${config.baseUrl}/users/me`, {
-            method: 'PATCH',
-            headers: {
-                authorization: config.headers.authorization,
-                'Content-Type': config.headers['Content-Type']
-            },
-            body: JSON.stringify({
-                name: name.value,
-                about: description.value
-            })
+    await fetch(`${config.baseUrl}/users/me`, {
+        method: 'PATCH',
+        headers: {
+            authorization: config.headers.authorization,
+            'Content-Type': config.headers['Content-Type']
+        },
+        body: JSON.stringify({
+            name: name.value,
+            about: description.value
         })
-    } catch (err) {
-        console.error(err)
-    } 
+    })
 }
 
 async function loadProfileData() {
-    try {
-        const res = await fetch(`${config.baseUrl}/users/me`, {
-            method: 'GET',
-            headers: {
-                authorization: config.headers.authorization,
-            },
-        })
-        if (res.ok) {
-            return await res.json()
-        }
-    } catch (err) {
-        console.error(err)
-    } 
+    const res = await fetch(`${config.baseUrl}/users/me`, {
+        method: 'GET',
+        headers: {
+            authorization: config.headers.authorization,
+        },
+    })
+    return await handleResponse(res)
 }
 
 async function uploadNewCard(name, link) {
-    try {
-        const res = await fetch(`${config.baseUrl}/cards`, {
-            method: 'POST',
-            headers: {
-                authorization: config.headers.authorization,
-                'Content-Type': config.headers['Content-Type']
-            },
-            body: JSON.stringify({
-                name: name,
-                link: link
-            })
+    const res = await fetch(`${config.baseUrl}/cards`, {
+        method: 'POST',
+        headers: {
+            authorization: config.headers.authorization,
+            'Content-Type': config.headers['Content-Type']
+        },
+        body: JSON.stringify({
+            name: name,
+            link: link
         })
-        if (res.ok) {
-            return await res.json()
-        }
-    } catch (err) {
-        console.error(err)
-    } 
+    })
+    return await handleResponse(res)
 }
 
 async function deleteCardData(cardId) {
-    try {
-        await fetch(`${config.baseUrl}/cards/${cardId.id}`, {
-            method: 'DELETE',
-            headers: {
-                authorization: config.headers.authorization,
-                
-            }
-        })
-    } catch (err) {
-        console.error(err)
-    } 
+    await fetch(`${config.baseUrl}/cards/${cardId.id}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: config.headers.authorization,   
+        }
+    })
 }
 
-async function increaseCounter(cardId, user) {
-    try {
-        await fetch(`${config.baseUrl}/cards/likes/${cardId.id}`, {
-            method: 'PUT',
-            headers: {
-                authorization: config.headers.authorization,
-                'Content-Type': config.headers['Content-Type']
-            },
-            body: JSON.stringify({
-                user: user
-            })
-        })
-    } catch (err) {
-        console.error(err)
-    } 
+async function increaseCounter(card) {
+    const res = await fetch(`${config.baseUrl}/cards/likes/${card.id}`, {
+        method: 'PUT',
+        headers: {
+            authorization: config.headers.authorization,
+            'Content-Type': config.headers['Content-Type']
+        },
+    })
+    return await handleResponse(res)
 }
 
-async function decreaseCounter(cardId) {
-    try {
-        await fetch(`${config.baseUrl}/cards/likes/${cardId.id}`, {
-            method: 'DELETE',
-            headers: {
-                authorization: config.headers.authorization,
-            }
-        })
-    } catch (err) {
-        console.error(err)
-    } 
+async function decreaseCounter(card) {
+    const res = await fetch(`${config.baseUrl}/cards/likes/${card.id}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: config.headers.authorization,
+        }
+    })
+    return await handleResponse(res)
 }
 
 async function updateAvatarData(avatarUrl) {
-    try {
-        await fetch(`${config.baseUrl}/users/me/avatar`, {
-            method: 'PATCH',
-            headers: {
-                authorization: config.headers.authorization,
-                'Content-Type': config.headers['Content-Type']
-            },
-            body: JSON.stringify({
-                avatar: avatarUrl
-            })
+    await fetch(`${config.baseUrl}/users/me/avatar`, {
+        method: 'PATCH',
+        headers: {
+            authorization: config.headers.authorization,
+            'Content-Type': config.headers['Content-Type']
+        },
+        body: JSON.stringify({
+            avatar: avatarUrl
         })
-    } catch (err) {
-        console.error(err)
-    } 
+    })
 }
 
 async function checkLink (url) {
-    try {
-        const res = await fetch(`${url}`, {
-            method: 'GET',
-        })
-        if (await res.status === 200) {
-            return true // по какой-то причине проходят не все сайты 
-        }
-    } catch (err) {
-        Promise.reject(res.status)
-        console.error(err)
-        return false
-    } 
+    const res = await fetch(`${url}`, {
+        method: 'GET',
+    })
+    if (res.ok) {
+        return true
+    }
+    Promise.reject(res.status)
+    return false
 }
 
 export {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink}
