@@ -1,27 +1,28 @@
-function enableValidation (form, validationConfig) {
-    const formList = Array.from(form.querySelectorAll(validationConfig.inputSelector))
-
-    formList.forEach((input) => {
-        input.addEventListener('submit', (evt) => {
-          evt.preventDefault();
-        });
-        setEventListeners(form, input, validationConfig);
+function enableValidation (validationConfig) {
+    const formList = document.querySelectorAll(validationConfig.formSelector)
+    formList.forEach((form) => {
+        const inputList = Array.from(form.querySelectorAll(validationConfig.inputSelector))
+        setEventListeners(form, inputList, validationConfig)
     })
 }
 
-function setEventListeners(form, input, validationConfig) {
-    input.addEventListener('input', function () {
-        checkInputValidity(form, input, validationConfig);
-        toggleButtonState(form, validationConfig)
-        console.log(input)
-    });
+function setEventListeners(form, inputList, validationConfig) {
+    console.log(form, inputList)
+    inputList.forEach((input) => {
+        input.addEventListener('input', () => {
+            checkInputValidity(form, input, validationConfig);
+            toggleButtonState(form, validationConfig)
+        })
+        input.addEventListener('submit', (evt) => {
+            evt.preventDefault()
+        })
+    }) 
 }
 
 const checkInputValidity = (formElement, inputElement, validationConfig) => {
     const letterRegExp = /^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$/
 
     if (!inputElement.value.match(letterRegExp) && !inputElement.classList.contains(validationConfig.inputUrlClass)) {
-        console.log('ошибка')
         inputElement.validity.regularExpError = true
     } else {
         inputElement.validity.regularExpError = false
@@ -33,20 +34,20 @@ const checkInputValidity = (formElement, inputElement, validationConfig) => {
       hideInputError(formElement, inputElement, validationConfig)
       inputElement.classList.add(validationConfig.inputConfirmClass)
     }
-};
+}
 
 function showInputError (formElement, inputElement, errorMessage, validationConfig) {
-    const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-    inputElement.classList.add(validationConfig.inputErrorClass); // для изменения цвета линии 
-    errorElement.textContent = errorMessage;
-    errorElement.classList.add(validationConfig.errorClass);
+    const errorElement = formElement.querySelector(`.${inputElement.id}-error`)
+    inputElement.classList.add(validationConfig.inputErrorClass) // для изменения цвета линии 
+    inputElement.classList.remove(validationConfig.inputConfirmClass)
+    errorElement.textContent = errorMessage
+    errorElement.classList.add(validationConfig.errorClass)
 }
 
 function hideInputError (formElement, inputElement, validationConfig) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`)
-    // console.log('aaa')
-    // console.log(validationConfig.inputErrorClass)
     inputElement.classList.remove(validationConfig.inputErrorClass); // для изменения цвета линии 
+    inputElement.classList.remove(validationConfig.inputConfirmClass)
     errorElement.classList.remove(validationConfig.errorClass);
     errorElement.textContent = ''
 }
@@ -63,23 +64,20 @@ function toggleButtonState (form, validationConfig, param = false) {
         buttonElement.classList.add(validationConfig.inactiveButtonClass);
         buttonElement.setAttribute('disabled', true)
         
-  } else {
+    } else {
         buttonElement.classList.remove(validationConfig.inactiveButtonClass);
         buttonElement.removeAttribute('disabled', true)
-  }
+    }
 }
 
 function clearValidation (formElement, validationConfig) {
     const errorElements = Array.from(formElement.querySelectorAll(validationConfig.inputErrorSelector))
-    const formList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector))
-    formList.forEach((input) => {
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector))
+    inputList.forEach((input) => {
         hideInputError(formElement, input, validationConfig)
-        input.classList.remove(validationConfig.inputConfirmClass)
-        input.value = ''
     })
     errorElements.forEach((element) => {
         element.classList.remove(validationConfig.errorClass)
-        // console.log(validationConfig.errorClass)
         element.textContent = '';
     })
     toggleButtonState(formElement, validationConfig, true)

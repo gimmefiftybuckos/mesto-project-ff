@@ -56,7 +56,7 @@
       <button aria-label="Закрыть всплывающее окно создания карточки" type="button" class="popup__close"></button>
       <h3 class="popup__title">Новое место</h3>
       <form class="popup__form" name="new-place" novalidate>
-        <input type="text" minlength="2" maxlength="30" pattern="\^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$\gim" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="place-name" id="card-name-input" class="popup__input popup__input_type_card-name" placeholder="Название" autocomplete="off" required>
+        <input type="text" minlength="2" maxlength="30" pattern="^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="place-name" id="card-name-input" class="popup__input popup__input_type_card-name" placeholder="Название" autocomplete="off" required>
         <span class="popup__input-error card-name-input-error"></span>
         <input type="url" name="card-link" id="link-input" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
         <span class="popup__input-error link-input-error"></span>

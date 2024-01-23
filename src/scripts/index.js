@@ -49,6 +49,7 @@ const errorWindow = document.querySelector('.error-message')
 const errorMessage = errorWindow.querySelector('.error-message__text')
 
 const validationConfig = {
+    formSelector: '.popup__form',
     inputSelector: '.popup__input',
     submitButtonSelector: '.popup__button',
     inactiveButtonClass: 'popup__button_disabled',
@@ -71,6 +72,7 @@ function loadProfile () {
 } 
 
 loadProfile()
+enableValidation(validationConfig)
 
 initialCards.forEach((card) => {
     cardList.append(createCard(card))
@@ -79,20 +81,17 @@ initialCards.forEach((card) => {
 profileEditBtn.addEventListener('click', () => {
     openModal(profileModal)
     clearValidation(profileModalForm, validationConfig)
-    enableValidation(profileModalForm, validationConfig)
     fillProfileInputs(profileNameInput, profileDescrInput, profileName, profileDesc)
 })
 
 addNewCardBtn.addEventListener('click', () => {
     openModal(newCardModal)
     clearValidation(newCardModalForm, validationConfig)
-    enableValidation(newCardModalForm, validationConfig)
 })
 
 profileAvatar.addEventListener('click', () => {
     openModal(avatarModal)
     clearValidation(avatarModalForm, validationConfig)
-    enableValidation(avatarModalForm, validationConfig)
 })
 
 popups.forEach((popup) => {
@@ -126,14 +125,13 @@ async function updateAvatar (link, event) {
         if (await checkingResponse) {
             updateAvatarData(link)
             changeAvatar(profileAvatar, link)
-            closeModal(avatarModal)
         }
     } catch (error) {
-        closeModal(avatarModal)
         setTimeout(() => showGlobalErrorMessage(errorWindow, errorMessage, link), 600)
         console.error(`Изображение по ссылке ${link} не найдено.`)
     } finally {
         hideSavingText(avatarModalButton)
+        closeModal(avatarModal)
         event.target.reset()
     }
 }
@@ -144,28 +142,25 @@ avatarModalForm.addEventListener('submit', (event) => {
     updateAvatar (link, event)
 })
 
-async function addCard (name, link, event) {
-    try {
-        showSavingText(newCardModalButton)
-        const checkingResponse = await checkLink(link)
-        .catch((err) => console.log(err))
-        if (await checkingResponse) {
-            const newCard = await uploadNewCard(name, link)
-            .catch((err) => console.log(err))
-            const loadedImage = await loadImage (name, link, newCard['_id'])
-            .catch((err) => console.log(err))
-            await cardList.prepend(createCard(loadedImage))
-            await closeModal(newCardModal)
-        }
-    } catch (error) {
-        closeModal(newCardModal)
-        setTimeout(() => showGlobalErrorMessage(errorWindow, errorMessage, link), 600)
-        console.error(`Изображение по ссылке ${link} не найдено.`)
-    } finally {
-        hideSavingText(newCardModalButton)
-        event.target.reset()
-    }
-}
+async function addCard (name, link, event) { 
+    try { 
+        showSavingText(newCardModalButton) 
+        const checkingResponse = await checkLink(link) 
+        await console.log(await checkingResponse)
+        if (await checkingResponse) { 
+            const newCard = await uploadNewCard(name, link) 
+            const loadedImage = await loadImage (name, link, newCard['_id']) 
+            await cardList.prepend(createCard(loadedImage)) 
+        } 
+    } catch (error) { 
+        setTimeout(() => showGlobalErrorMessage(errorWindow, errorMessage, link), 600) 
+        console.error(`Изображение по ссылке ${link} не найдено.`) 
+    } finally { 
+        hideSavingText(newCardModalButton) 
+        closeModal(newCardModal) 
+        event.target.reset() 
+    } 
+} 
 
 newCardModalForm.addEventListener('submit', (event) => {
     event.preventDefault()

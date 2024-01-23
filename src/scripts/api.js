@@ -105,16 +105,20 @@ async function updateAvatarData(avatarUrl) {
     })
 }
 
-async function checkLink (url) {
-    const res = await fetch(`${url}`, {
-        method: 'GET',
-    })
-    if (res.ok) {
-        return true
-    }
-    Promise.reject(res.status)
-    return false
-}
+async function checkLink (url) { 
+    try { 
+        const res = await fetch(`${url}`, { 
+            method: 'GET', 
+        }) 
+        if (await res.ok) { 
+            return true 
+        } 
+    } catch (err) { 
+        Promise.reject(res.status) 
+        console.error(err) 
+        return false 
+    }  
+} 
 
 export {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink}
 
