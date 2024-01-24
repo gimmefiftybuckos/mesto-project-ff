@@ -39,13 +39,30 @@ function createTemplate (cardTemplate, handleDelete, handleLike, handleImageClic
   }
 }
 
-function createDeleteHandle (deleteCardData) {
+function createDeleteHandle (deleteCardData, getInitalCards, showRecoverMessage) {
   return async function (event) {
     const cardElement = event.target.closest('.card')
+    const initialCards = await getInitalCards()
+    
     await deleteCardData(cardElement)
-    await cardElement.remove()
+    await cardElement.remove() // нужно попробовать скрыть карточку от пользователя, если он не нажал на кнопку 'восстановить' - удаляем карточку
+    // const cardData = await getCardData(initialCards, cardElement) // функция находит элемент при нужном условии, но не возвращает результат
+    await initialCards.forEach(obj => {
+      if (obj['_id'] === cardElement.id) {
+        showRecoverMessage(obj)
+      }
+    })
   }
 }
+
+// async function getCardData(initialCards, cardElement) {
+//   initialCards.forEach(obj => {
+//     if (obj['_id'] === cardElement.id) {
+//       console.log(obj)
+//       return obj
+//     }
+//   })
+// }
 
 function createLikeHandle (increaseCounter, decreaseCounter) {
   return async function (event) {
@@ -70,7 +87,7 @@ async function loadImage (name, link, id) {
 
     image.src = link
     image.name = name
-    image.id = id // кажется, задавать id карточки в атрибутах не слишком правильно с точки зрения безопасности
+    image.id = id
 
     image.onload = () => resolve(image)
     image.onerror = () => reject(link)

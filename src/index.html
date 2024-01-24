@@ -34,18 +34,25 @@
       © 2024 Mesto Russia
     </p>
   </footer>
-  <div class="error-message">
+  <div class="message error-message">
     <h4 class="error-message__title">Ошибка</h4>
     <p class="error-message__text"></p>
+  </div>
+  <div class="message recover-message">
+    <h4 class="recover-message__title">Карточка была удалена</h4>
+    <p class="recover-message__text">фффффффффффффффффффффффф</p>
+    <form class="recover-message__form" action="">
+      <button type="submit" class="recover-message__button">Восстановить</button>
+    </form>
   </div>
   <div class="popup popup_type_edit">
     <div class="popup__content">
       <button aria-label="Закрыть всплывающее окно редактирования профиля" type="button" class="popup__close"></button>
       <h3 class="popup__title">Редактировать профиль</h3>
       <form class="popup__form" name="edit-profile" novalidate>
-        <input type="text" minlength="2" maxlength="40" pattern="^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="name" id="name-input" class="popup__input popup__input_type_name" placeholder="Имя" autocomplete="off" required>
+        <input type="text" minlength="2" maxlength="40" pattern="^[a-zA-Zа-яёА-ЯЁ]+([\s][a-zA-Zа-яёА-ЯЁ]+)*" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="name" id="name-input" class="popup__input popup__input_type_name" placeholder="Имя" autocomplete="off" required>
         <span class="popup__input-error name-input-error" ></span>
-        <input type="text" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="description" id="description-input" class="popup__input popup__input_type_description" placeholder="Занятие" autocomplete="off" required>
+        <input type="text" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яёА-ЯЁ]+([\s][a-zA-Zа-яёА-ЯЁ]+)*" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="description" id="description-input" class="popup__input popup__input_type_description" placeholder="Занятие" autocomplete="off" required>
         <span class="popup__input-error description-input-error"></span>
         <button aria-label="Сохранить изменения в профиле и закрыть всплывающее окно" type="submit" class="button popup__button">Сохранить</button>
       </form>
@@ -56,7 +63,7 @@
       <button aria-label="Закрыть всплывающее окно создания карточки" type="button" class="popup__close"></button>
       <h3 class="popup__title">Новое место</h3>
       <form class="popup__form" name="new-place" novalidate>
-        <input type="text" minlength="2" maxlength="30" pattern="^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="place-name" id="card-name-input" class="popup__input popup__input_type_card-name" placeholder="Название" autocomplete="off" required>
+        <input type="text" minlength="2" maxlength="30" pattern="^[a-zA-Zа-яёА-ЯЁ]+([\s][a-zA-Zа-яёА-ЯЁ]+)*" data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" name="place-name" id="card-name-input" class="popup__input popup__input_type_card-name" placeholder="Название" autocomplete="off" required>
         <span class="popup__input-error card-name-input-error"></span>
         <input type="url" name="card-link" id="link-input" class="popup__input popup__input_type_url" placeholder="Ссылка на картинку" required>
         <span class="popup__input-error link-input-error"></span>

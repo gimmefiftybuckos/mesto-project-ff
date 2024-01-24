@@ -10,7 +10,7 @@ function setEventListeners(form, inputList, validationConfig) {
     console.log(form, inputList)
     inputList.forEach((input) => {
         input.addEventListener('input', () => {
-            checkInputValidity(form, input, validationConfig);
+            checkInputValidity(form, input, validationConfig)
             toggleButtonState(form, validationConfig)
         })
         input.addEventListener('submit', (evt) => {
@@ -19,21 +19,23 @@ function setEventListeners(form, inputList, validationConfig) {
     }) 
 }
 
-const checkInputValidity = (formElement, inputElement, validationConfig) => {
-    const letterRegExp = /^[a-zA-Zа-яёА-ЯЁ]+(?:[\s.-][a-zA-Zа-яёА-ЯЁ]+)*$/
-
-    if (!inputElement.value.match(letterRegExp) && !inputElement.classList.contains(validationConfig.inputUrlClass)) {
-        inputElement.validity.regularExpError = true
-    } else {
-        inputElement.validity.regularExpError = false
-    }
-
-    if (!inputElement.validity.valid || inputElement.validity.regularExpError) {
-      showInputError(formElement, inputElement, inputElement.validationMessage || inputElement.dataset.errorMessage, validationConfig);
-    } else {
-      hideInputError(formElement, inputElement, validationConfig)
-      inputElement.classList.add(validationConfig.inputConfirmClass)
-    }
+const checkInputValidity = (formElement, inputElement, validationConfig) => { // но ведь при таком раскладе любой понимающий в код пользователь может просто стереть pattern и ввести все что вздумается
+    if (inputElement.validity.patternMismatch) { 
+        inputElement.setCustomValidity(inputElement.dataset.errorMessage)
+      } else { 
+        inputElement.setCustomValidity("")
+      } 
+      if (!inputElement.validity.valid) { 
+        showInputError( 
+          formElement, 
+          inputElement, 
+          inputElement.validationMessage, 
+          validationConfig 
+        )
+      } else { 
+        hideInputError(formElement, inputElement, validationConfig)
+        inputElement.classList.add(validationConfig.inputConfirmClass)
+      } 
 }
 
 function showInputError (formElement, inputElement, errorMessage, validationConfig) {
@@ -46,26 +48,26 @@ function showInputError (formElement, inputElement, errorMessage, validationConf
 
 function hideInputError (formElement, inputElement, validationConfig) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`)
-    inputElement.classList.remove(validationConfig.inputErrorClass); // для изменения цвета линии 
+    inputElement.classList.remove(validationConfig.inputErrorClass) // для изменения цвета линии 
     inputElement.classList.remove(validationConfig.inputConfirmClass)
-    errorElement.classList.remove(validationConfig.errorClass);
+    errorElement.classList.remove(validationConfig.errorClass)
     errorElement.textContent = ''
 }
 
 function hasInvalidInput (inputList) {
     return inputList.some((inputElement) => {
-    return !inputElement.validity.valid || inputElement.validity.regularExpError;
-  });
+    return !inputElement.validity.valid
+  })
 }
 
 function toggleButtonState (form, validationConfig, param = false) {
     const buttonElement = form.querySelector(validationConfig.submitButtonSelector)
-    if (hasInvalidInput(Array.from(form)) || param) {
-        buttonElement.classList.add(validationConfig.inactiveButtonClass);
+    if (param || hasInvalidInput(Array.from(form))) {
+        buttonElement.classList.add(validationConfig.inactiveButtonClass)
         buttonElement.setAttribute('disabled', true)
         
     } else {
-        buttonElement.classList.remove(validationConfig.inactiveButtonClass);
+        buttonElement.classList.remove(validationConfig.inactiveButtonClass)
         buttonElement.removeAttribute('disabled', true)
     }
 }
@@ -78,7 +80,7 @@ function clearValidation (formElement, validationConfig) {
     })
     errorElements.forEach((element) => {
         element.classList.remove(validationConfig.errorClass)
-        element.textContent = '';
+        element.textContent = ''
     })
     toggleButtonState(formElement, validationConfig, true)
 }

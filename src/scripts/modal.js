@@ -13,6 +13,12 @@ function closeModal(modalWindow) {
     document.removeEventListener('keydown', handleEscape)
 }
 
+const closePopupByOverlay = evt => {
+    if (event.target.classList.contains('popup_is-opened') || event.target.classList.contains('popup__close')) { 
+            closeModal(evt.currentTarget) 
+    }
+}
+
 function openModal(modal) {
     inAnimation = true
     modal.classList.add('popup_is-animated')
@@ -32,26 +38,4 @@ function handleEscape(evt) {
     }
 }
 
-function fillProfileInputs (nameInput, descriptionInput, name, description) {
-    nameInput.value = name.textContent
-    descriptionInput.value = description.textContent
-}
-
-function changeProfile (nameInput, descriptionInput, name, description) {
-    name.textContent = nameInput.value  
-    description.textContent = descriptionInput.value  
-}
-
-function changeAvatar (profileAvatar, link) {
-    profileAvatar.style.backgroundImage = `url(${link})`
-}
-
-function showSavingText (button) {
-    button.textContent = 'Сохранение...'
-}
-
-function hideSavingText (button) {
-    button.textContent = 'Сохранить'
-}
-
-export {openModal, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText}
+export {openModal, closeModal, closePopupByOverlay}

@@ -47,7 +47,7 @@ async function loadProfileData() {
     return await handleResponse(res)
 }
 
-async function uploadNewCard(name, link) {
+async function uploadCard(name, link) {
     const res = await fetch(`${config.baseUrl}/cards`, {
         method: 'POST',
         headers: {
@@ -62,8 +62,8 @@ async function uploadNewCard(name, link) {
     return await handleResponse(res)
 }
 
-async function deleteCardData(cardId) {
-    await fetch(`${config.baseUrl}/cards/${cardId.id}`, {
+async function deleteCardData(card) {
+    await fetch(`${config.baseUrl}/cards/${card.id}`, {
         method: 'DELETE',
         headers: {
             authorization: config.headers.authorization,   
@@ -120,7 +120,7 @@ async function checkLink (url) {
     }  
 } 
 
-export {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink}
+export {getInitalCards, updateProfileData, loadProfileData, uploadCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink}
 
 
 

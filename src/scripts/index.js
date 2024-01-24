@@ -1,9 +1,9 @@
 import '../pages/index.css';
 import {createTemplate, loadImage, createDeleteHandle, createLikeHandle} from './cards.js'
-import {openModal, closeModal, fillProfileInputs, changeProfile, changeAvatar, showSavingText, hideSavingText} from './modal.js'
+import {openModal, closeModal, closePopupByOverlay} from './modal.js'
 import {enableValidation, clearValidation} from './validation.js'
-import {getInitalCards, updateProfileData, loadProfileData, uploadNewCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink} from './api.js'
-import {showGlobalErrorMessage} from './error.js'
+import {getInitalCards, updateProfileData, loadProfileData, uploadCard, deleteCardData, increaseCounter, decreaseCounter, updateAvatarData, checkLink} from './api.js'
+import {showGlobalErrorMessage, createRecoverMessage} from './message.js'
 
 const initialCards = await getInitalCards() 
 .catch((err) => console.log(err))
@@ -48,6 +48,10 @@ const avatarLinkInput = avatarModalForm.elements['avatar-link']
 const errorWindow = document.querySelector('.error-message')
 const errorMessage = errorWindow.querySelector('.error-message__text')
 
+const recoverWindow = document.querySelector('.recover-message')
+const recoverMessage = recoverWindow.querySelector('.recover-message__text')
+const recoverForm = recoverWindow.querySelector('.recover-message__form')
+
 const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
@@ -60,8 +64,9 @@ const validationConfig = {
     errorClass: 'form__input-error_active'
 }
 
+const showRecoverMessage = createRecoverMessage(recoverWindow, recoverMessage, recoverForm, uploadCard)
 const handleImageClick = createImageHandler(modalTypeImage, imageModal, descrModal)
-const handleDelete = createDeleteHandle(deleteCardData)
+const handleDelete = createDeleteHandle(deleteCardData, getInitalCards, showRecoverMessage, uploadCard)
 const handleLike = createLikeHandle(increaseCounter, decreaseCounter)
 const createCard = createTemplate(cardTemplate, handleDelete, handleLike, handleImageClick, userProfileData)
 
@@ -94,19 +99,15 @@ profileAvatar.addEventListener('click', () => {
     clearValidation(avatarModalForm, validationConfig)
 })
 
-popups.forEach((popup) => {
-    popup.addEventListener('mousedown', (event) => {
-        if (event.target.classList.contains('popup_is-opened') || event.target.classList.contains('popup__close')) {
-            closeModal(popup)
-        }
-    })
-})
-
 profileModalForm.addEventListener('submit', (event) => {
     event.preventDefault()
     changeProfile(profileNameInput, profileDescrInput, profileName, profileDesc)
     updateProfileData(profileNameInput, profileDescrInput)
     closeModal(profileModal)
+})
+
+popups.forEach((popup) => {
+    popup.addEventListener('mousedown', closePopupByOverlay)
 })
 
 function createImageHandler(modalTypeImage, imageModal, descrModal) {
@@ -148,7 +149,7 @@ async function addCard (name, link, event) {
         const checkingResponse = await checkLink(link) 
         await console.log(await checkingResponse)
         if (await checkingResponse) { 
-            const newCard = await uploadNewCard(name, link) 
+            const newCard = await uploadCard(name, link) 
             const loadedImage = await loadImage (name, link, newCard['_id']) 
             await cardList.prepend(createCard(loadedImage)) 
         } 
@@ -168,3 +169,25 @@ newCardModalForm.addEventListener('submit', (event) => {
     const link = newCardLinkInput.value
     addCard(name, link, event)
 })
+
+function fillProfileInputs (nameInput, descriptionInput, name, description) {
+    nameInput.value = name.textContent
+    descriptionInput.value = description.textContent
+}
+
+function changeProfile (nameInput, descriptionInput, name, description) {
+    name.textContent = nameInput.value  
+    description.textContent = descriptionInput.value  
+}
+
+function changeAvatar (profileAvatar, link) {
+    profileAvatar.style.backgroundImage = `url(${link})`
+}
+
+function showSavingText (button) {
+    button.textContent = 'Сохранение...'
+}
+
+function hideSavingText (button) {
+    button.textContent = 'Сохранить'
+}

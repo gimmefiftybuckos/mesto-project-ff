@@ -1,7 +1,7 @@
-@import url('./__text/error-message__text.css');
-@import url('./__title/error-message__title.css');
+@import url('./error-message/error-message.css');
+@import url('./recover-message/recover-message.css');
 
-.error-message {
+.message {
     font-family: 'Inter', Arial, sans-serif;
     box-sizing: border-box;
     position: fixed;
@@ -17,5 +17,4 @@
     background-color: rgba(255 255 255 / 1);
     border-radius: 10px;
     color: rgb(255, 0, 0); 
-    /* opacity: .8; */
 }
